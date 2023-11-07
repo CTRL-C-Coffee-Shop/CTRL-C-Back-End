@@ -28,9 +28,9 @@ type Product struct {
 }
 
 type ProductResponse struct {
-	Status  int     `json: "id"`
-	Message string  `json: "name"`
-	Data    Product `json:"Data"`
+	Status  int       `json: "id"`
+	Message string    `json: "name"`
+	Data    []Product `json:"Data"`
 }
 
 type Shop struct {

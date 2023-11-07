@@ -7,7 +7,7 @@ import (
 )
 
 func UserLogin(w http.ResponseWriter, r *http.Request) {
-	db = connectDB()
+	db := connectDB()
 	defer db.Close()
 	 
 	name := r.URL.Query()
@@ -17,7 +17,7 @@ func UserLogin(w http.ResponseWriter, r *http.Request) {
 	var user User
 	if err := row.Scan(&user.ID, &user.Name, &user.Email, &user.UserType); err != nil {
 		fmt.Println(err)
-		sendErrorResponse(w, "error")
+		sendErrorResponse(w, "error user not found")
 	} else {
 		generateToken(w, user.ID, user.Name, user.Email, user.UserType)
 	}
@@ -28,7 +28,7 @@ func Logout(w http.ResponseWriter, r *http.Request){
 
 	var response UserResponse
 	response.Status = 200
-	response.Message = "Success"
+	response.Message = "Successfully login"
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(response)
@@ -37,7 +37,7 @@ func Logout(w http.ResponseWriter, r *http.Request){
 
 func sendErrorResponse(w http.ResponseWriter, Message string) {
 	var response ErrorResponse
-	response.Status = 400
+	response.Status = 404
 	response.Message = Message
 
 	w.Header().Set("Content-Type","application/json")
