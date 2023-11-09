@@ -1,41 +1,17 @@
 package controllers
 
 type User struct {
-	ID       int    `json: "id"`
-	Name     string `json: "full_name"`
-	Email    string `json: "email"`
-	Password string `json: "pass"`
-	UserType bool   `json: "acc_type"`
+	ID       uint   `gorm:"primaryKey"`
+	FullName string `gorm:"not null"`
+	Email    string `gorm:"not null;unique"`
+	Password string `gorm:"not null"`
+	AccType  bool   `gorm:"not null"`
 }
-
-type UserResponse struct {
-	Status  int    `json: "id"`
-	Message string `json: "name"`
-	Data    User   `json:"Data"`
-}
-
-type ErrorResponse struct {
-	Status  int    `json: "id"`
-	Message string `json: "name"`
-}
-
 type Product struct {
-	ID       int    `json: "id"`
-	Name     string `json: "item_name"`
-	Desc     string `json: "item_desc"`
-	Price    int    `json: "price"`
-	MenuType string `json: "item_type"`
-	Url      string `json: "url"`
-}
-
-type ProductResponse struct {
-	Status  int       `json: "id"`
-	Message string    `json: "name"`
-	Data    []Product `json:"Data"`
-}
-
-type Shop struct {
-	ID      int    `json: "id"`
-	Name    string `json: "shop_name"`
-	Address string `json: "address"`
+	ID          uint    `json:"id"`
+	Name        string  `json:"name"`
+	Description string  `json:"description"`
+	Price       float64 `json:"price"`
+	Type        string  `json:"type"`
+	URL         string  `json:"url"`
 }

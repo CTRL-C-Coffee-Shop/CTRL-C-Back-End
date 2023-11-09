@@ -1,30 +1,22 @@
 package main
 
 import (
-	"fmt"
-	"log"
-	"net/http"
+	"CTRL-C-Back-End/controllers"
 
-	"ctrl-c.com/controllers"
-
-	"github.com/gorilla/mux"
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
-	router := mux.NewRouter()
 
-	//authentication
-	router.HandleFunc("/login", controllers.UserLogin).Methods("GET")
-	router.HandleFunc("/logout", controllers.Logout).Methods("GET")
+	r := gin.Default()
 
-	//user
+	// user
+	r.POST("/register", controllers.Register)
+	r.GET("/userlogin", controllers.Login)
+	r.GET("/userlogout", controllers.Logout)
 
 	//product
-	router.HandleFunc("/product",controllers.Authenticate(controllers.GetProductsHandler, false)).Methods("GET")
+	r.GET("/product", controllers.Authenticate(false), controllers.GetAllProducts)
 
-	
-	http.Handle("/", router)
-	fmt.Println("Connected to port 8080")
-	log.Println("Connected to port 8080")
-	log.Fatal(http.ListenAndServe(":8080",router))
+	r.Run("localhost:8080")
 }
