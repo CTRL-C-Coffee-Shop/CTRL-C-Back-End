@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"crypto/sha256"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -10,14 +11,19 @@ func UserLogin(w http.ResponseWriter, r *http.Request) {
 	db := connectDB()
 	defer db.Close()
 	 
-	name := r.URL.Query()
+	email := r.Form.Get("email")
+	//get password the change into sha256
+	password := r.Form.Get("password")
+	h := sha256.New()
+	h.Write([]byte(password))
+	bs := h.Sum(nil)
 
-	row := db.QueryRow("SELECT * FROM users WHERE name=?", name)
+	row := db.QueryRow("SELECT * FROM users WHERE email=? AND password =?", email, bs )
 
 	var user User
-	if err := row.Scan(&user.ID, &user.Name, &user.Email, &user.UserType); err != nil {
+	if err := row.Scan(&user.ID, &user.Name, &user.Email, &user.Password, &user.UserType); err != nil{
 		fmt.Println(err)
-		sendErrorResponse(w, "error user not found")
+		sendErrorResponse(w, "error username or password missmatch")
 	} else {
 		generateToken(w, user.ID, user.Name, user.Email, user.UserType)
 	}
@@ -28,7 +34,7 @@ func Logout(w http.ResponseWriter, r *http.Request){
 
 	var response UserResponse
 	response.Status = 200
-	response.Message = "Successfully login"
+	response.Message = "Successfully logout"
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(response)

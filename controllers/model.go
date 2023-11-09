@@ -4,6 +4,7 @@ type User struct {
 	ID       int    `json: "id"`
 	Name     string `json: "full_name"`
 	Email    string `json: "email"`
+	Password string `json: "pass"`
 	UserType bool   `json: "acc_type"`
 }
 

@@ -7,7 +7,7 @@ import (
 )
 
 
-func getProductsHandler(w http.ResponseWriter, r *http.Request) {
+func GetProductsHandler(w http.ResponseWriter, r *http.Request) {
     db := connectDB()
 	defer db.Close()
 
