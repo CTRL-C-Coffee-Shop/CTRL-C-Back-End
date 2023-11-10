@@ -1,7 +1,7 @@
 package main
 
 import (
-	"CTRL-C-Back-End/controllers"
+	"github.com/CTRL-C-Back-End/controllers"
 
 	"github.com/gin-gonic/gin"
 )
