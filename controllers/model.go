@@ -15,3 +15,11 @@ type Product struct {
 	Type        string  `json:"type"`
 	URL         string  `json:"url"`
 }
+
+type Voucher struct {
+	ID          uint   `json:"id"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	Discount    uint   `json:"price"`
+	Number      uint   `json:"type"`
+}
