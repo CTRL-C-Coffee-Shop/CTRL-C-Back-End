@@ -15,3 +15,9 @@ type Product struct {
 	Type        string  `json:"type"`
 	URL         string  `json:"url"`
 }
+
+type Kedai struct {
+	ID      uint   `json:"id"`
+	Name    string `json:"name"`
+	Address string `json:"address"`
+}
