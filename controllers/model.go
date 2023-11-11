@@ -7,6 +7,7 @@ type User struct {
 	Password string `gorm:"not null"`
 	AccType  bool   `gorm:"not null"`
 }
+
 type Product struct {
 	ID          uint    `json:"id"`
 	Name        string  `json:"name"`
@@ -14,6 +15,12 @@ type Product struct {
 	Price       float64 `json:"price"`
 	Type        string  `json:"type"`
 	URL         string  `json:"url"`
+}
+
+type Kedai struct {
+	ID      uint   `json:"id"`
+	Name    string `json:"name"`
+	Address string `json:"address"`
 }
 
 type OrderDetail struct {
@@ -31,7 +38,8 @@ type Order struct {
 	date      string        `gorm:"not null"`
 	price     uint          `gorm:"not null"`
 	status    string        `gorm:"not null"`
-
+}
+  
 type Voucher struct {
 	ID          uint   `json:"id"`
 	Name        string `json:"name"`
