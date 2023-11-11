@@ -101,11 +101,12 @@ func Login(c *gin.Context) {
 	}
 
 	// Jika login sukses, Anda dapat memanggil generateToken berdasarkan AccType pengguna
-	jwtToken, err := generateToken(c, int(user.ID), user.FullName, user.Email, user.AccType)
+	jwtToken, err := generateToken(int(user.ID), user.FullName, user.Email, user.AccType)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Gagal menghasilkan token"})
 		return
 	}
+	c.SetCookie(tokenName, jwtToken, 0, "/", "", false, true)
 
 	// Mengirim pesan sukses, nama pengguna, dan token sebagai respons
 	c.JSON(http.StatusOK, gin.H{"message": "Berhasil login", "name": user.FullName, "token": jwtToken})

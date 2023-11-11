@@ -31,4 +31,11 @@ type Order struct {
 	date      string        `gorm:"not null"`
 	price     uint          `gorm:"not null"`
 	status    string        `gorm:"not null"`
+
+type Voucher struct {
+	ID          uint   `json:"id"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	Discount    uint   `json:"price"`
+	Number      uint   `json:"type"`
 }

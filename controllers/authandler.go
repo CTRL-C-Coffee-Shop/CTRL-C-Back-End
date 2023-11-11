@@ -3,6 +3,7 @@ package controllers
 import (
 	"net/http"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -20,7 +21,7 @@ type Claims struct {
 	jwt.StandardClaims
 }
 
-func generateToken(c *gin.Context, id int, name string, email string, userType bool) (string, error) {
+func generateToken(id int, name string, email string, userType bool) (string, error) {
 	tokenExpiryTime := time.Now().Add(1000 * 365 * time.Hour)
 
 	// Membuat claims
@@ -40,26 +41,22 @@ func generateToken(c *gin.Context, id int, name string, email string, userType b
 	if err != nil {
 		return "", err
 	}
-
-	// Set token dalam cookies
-	http.SetCookie(c.Writer, &http.Cookie{
-		Name:     tokenName,
-		Value:    jwtToken,
-		Expires:  tokenExpiryTime,
-		Secure:   false,
-		HttpOnly: true,
-	})
-
 	return jwtToken, nil
 }
 
-func validateTokenFromCookies(r *http.Request) (*Claims, bool) {
-	cookie, err := r.Cookie(tokenName)
-	if err != nil {
+func validateTokenFromHeader(r *http.Request) (*Claims, bool) {
+	authorizationHeader := r.Header.Get("Authorization")
+	if authorizationHeader == "" {
 		return nil, false
 	}
 
-	jwtToken := cookie.Value
+	// Format header Authorization: Bearer {token}
+	splitToken := strings.Split(authorizationHeader, "Bearer ")
+	if len(splitToken) != 2 {
+		return nil, false
+	}
+
+	jwtToken := strings.TrimSpace(splitToken[1])
 	accessClaims := &Claims{}
 	parsedToken, err := jwt.ParseWithClaims(jwtToken, accessClaims, func(accessToken *jwt.Token) (interface{}, error) {
 		return jwtKey, nil
@@ -69,20 +66,16 @@ func validateTokenFromCookies(r *http.Request) (*Claims, bool) {
 }
 
 func validateUserToken(c *gin.Context, accessType bool) bool {
-	accessClaims, isValidToken := validateTokenFromCookies(c.Request)
+	accessClaims, isValidToken := validateTokenFromHeader(c.Request)
 	if !isValidToken {
 		return false
 	}
 
 	isUserValid := accessClaims.UserType == accessType
-	if isUserValid {
-		return true
-	}
-
-	return false
+	return isUserValid
 }
 
-func sendUnAuthorizedResponse(c *gin.Context) {
+func sendUnauthorizedResponse(c *gin.Context) {
 	c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
 	c.Abort()
 }
@@ -91,7 +84,7 @@ func Authenticate(accessType bool) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		isValidToken := validateUserToken(c, accessType)
 		if !isValidToken {
-			sendUnAuthorizedResponse(c)
+			sendUnauthorizedResponse(c)
 		} else {
 			c.Next()
 		}
