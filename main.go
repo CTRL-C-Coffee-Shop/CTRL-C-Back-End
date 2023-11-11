@@ -3,7 +3,6 @@ package main
 import (
 	"CTRL-C-Back-End/controllers"
 	"net/http"
-
 	// Import the CORS middleware
 	"github.com/gin-gonic/gin"
 )
