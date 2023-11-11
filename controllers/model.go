@@ -7,6 +7,7 @@ type User struct {
 	Password string `gorm:"not null"`
 	AccType  bool   `gorm:"not null"`
 }
+
 type Product struct {
 	ID          uint    `json:"id"`
 	Name        string  `json:"name"`
@@ -20,4 +21,29 @@ type Kedai struct {
 	ID      uint   `json:"id"`
 	Name    string `json:"name"`
 	Address string `json:"address"`
+}
+
+type OrderDetail struct {
+	OrderID   uint `gorm:"primaryKey"`
+	ProductID uint `gorm:"primaryKey"`
+	Amount    uint `gorm:"not null"`
+}
+
+type Order struct {
+	OrderID   uint          `gorm:"primaryKey"`
+	UserID    uint          `gorm:"not null"`
+	ShopID    uint          `gorm:"not null"`
+	VoucherID uint          `gorm:"not null"`
+	orders    []OrderDetail `gorm:"not null"`
+	date      string        `gorm:"not null"`
+	price     uint          `gorm:"not null"`
+	status    string        `gorm:"not null"`
+}
+  
+type Voucher struct {
+	ID          uint   `json:"id"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	Discount    uint   `json:"price"`
+	Number      uint   `json:"type"`
 }
