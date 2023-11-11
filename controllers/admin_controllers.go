@@ -7,15 +7,11 @@ import (
 )
 
 func GetAllOrder(c *gin.Context) {
-	//bantu, bingung gw
-	//tujuan, SELECT orders.*, detail_orders.* FROM orders JOIN detail_orders ON orders.id_order = detail_orders.id_order
-	
-	db := connect() 
+	db := connect()
 
 	var orders []Order
-	var detailOrder []OrderDetail
 
-	result := db.Table("product").Find(&orders) 
+	result := db.Preload("Orders").Find(&orders) // Preload orders details
 
 	if result.Error != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Gagal mengambil produk"})
@@ -47,7 +43,7 @@ func UpdateOrders(c *gin.Context) {
 	order.status = stat
 	if err := db.Save(&order).Error; err != nil {
 		c.JSON(http.StatusConflict, gin.H{"error": "Gagal Update status"})
-		return 
+		return
 	}
 
 	c.JSON(http.StatusCreated, gin.H{"message": "Order Updated"})

@@ -34,12 +34,11 @@ type Order struct {
 	UserID    uint          `gorm:"not null"`
 	ShopID    uint          `gorm:"not null"`
 	VoucherID uint          `gorm:"not null"`
-	orders    []OrderDetail `gorm:"not null"`
-	date      string        `gorm:"not null"`
-	price     uint          `gorm:"not null"`
-	status    string        `gorm:"not null"`
+	Details   []OrderDetail `gorm:"foreignKey:OrderID"` // Specify the foreign key relationship
+	Date      string        `gorm:"not null"`
+	Price     uint          `gorm:"not null"`
+	Status    string        `gorm:"not null"`
 }
-  
 type Voucher struct {
 	ID          uint   `json:"id"`
 	Name        string `json:"name"`
