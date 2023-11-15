@@ -24,9 +24,9 @@ type Kedai struct {
 }
 
 type OrderDetail struct {
-	OrderID   uint `gorm:"primaryKey"`
-	ProductID uint `gorm:"primaryKey"`
-	Amount    uint `gorm:"not null"`
+	OrderID   int `gorm:"primaryKey"`
+	ProductID int `gorm:"primaryKey"`
+	Amount    int `gorm:"not null"`
 }
 
 type Order struct {
@@ -45,4 +45,9 @@ type Voucher struct {
 	Description string `json:"description"`
 	Discount    uint   `json:"price"`
 	Number      uint   `json:"type"`
+}
+
+type ErrorResponse struct {
+	Status  int    `json:"status"`
+	Message string `json:"message"`
 }
