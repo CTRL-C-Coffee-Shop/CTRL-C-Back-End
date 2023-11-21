@@ -95,7 +95,7 @@ func Login(c *gin.Context) {
 
 	// Memeriksa apakah kata sandi yang diinputkan sama dengan kata sandi yang ada dalam database
 	if inputPasswordHash != user.Password {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Email atau password salah"})
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Wrong Email Or Password"})
 		return
 	}
 
