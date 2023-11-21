@@ -7,15 +7,15 @@ import (
 )
 
 func GetAllVouchers(c *gin.Context) {
-	db := connect() 
+	db := connect()
 
 	// Menggunakan GORM untuk mengambil semua produk dari basis data
-	var vouchers []Product 
+	var vouchers []Voucher
 
-	result := db.Table("voucher").Find(&vouchers) 
+	result := db.Table("voucher").Find(&vouchers)
 
 	if result.Error != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Gagal mengambil voucher"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve voucher"})
 		return
 	}
 

@@ -5,7 +5,6 @@ import (
 	"encoding/hex"
 	"net/http"
 	"strconv"
-	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -110,17 +109,4 @@ func Login(c *gin.Context) {
 
 	// Mengirim pesan sukses, nama pengguna, dan token sebagai respons
 	c.JSON(http.StatusOK, gin.H{"message": "Berhasil login", "name": user.FullName, "token": jwtToken})
-}
-
-func Logout(c *gin.Context) {
-	// Menghapus token dengan mengganti nilai token dengan string kosong
-	http.SetCookie(c.Writer, &http.Cookie{
-		Name:     tokenName,
-		Value:    "",
-		Expires:  time.Now(),
-		Secure:   false,
-		HttpOnly: true,
-	})
-
-	c.JSON(http.StatusOK, gin.H{"message": "Berhasil logout"})
 }

@@ -16,7 +16,7 @@ func GetAllProducts(c *gin.Context) {
 	result := db.Table("product").Find(&products) // Perhatikan penggunaan db.Table("product") untuk merujuk tabel "product"
 
 	if result.Error != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Gagal mengambil produk"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve products"})
 		return
 	}
 

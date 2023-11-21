@@ -1,4 +1,4 @@
-module github.com/CTRL-C-Back-End
+module CTRL-C-Back-End
 
 go 1.21.3
 

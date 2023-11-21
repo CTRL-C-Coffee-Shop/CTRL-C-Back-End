@@ -6,45 +6,52 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func GetAllOrder(c *gin.Context) {
+func GetOrderAdmin(c *gin.Context) {
 	db := connect()
 
 	var orders []Order
 
-	result := db.Preload("Orders").Find(&orders) // Preload orders details
+	// Use Preload to include the associated Voucher data
+	result := db.Table("orders").Find(&orders)
 
 	if result.Error != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Gagal mengambil produk"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve orders"})
 		return
 	}
 
 	c.JSON(http.StatusOK, orders)
 }
-
-func UpdateOrders(c *gin.Context) {
+func UpdateOrderStatus(c *gin.Context) {
 	db := connect()
 
-	orderID := c.PostForm("OrderID")
-	stat := c.PostForm("Status")
+	// Get order ID from request parameters
+	orderID := c.PostForm("Order_Id")
 
-	if orderID == "" || stat == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Harap isi semua field"})
-		return
-	}
-
-	//get data
+	// Find the order by ID
 	var order Order
-	if err := db.First(&order, orderID).Error; err != nil {
-		c.JSON(http.StatusConflict, gin.H{"error": "Order not found"})
+	result := db.Table("orders").First(&order, orderID)
+
+	if result.Error != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Order not found"})
 		return
 	}
 
-	//update
-	order.status = stat
-	if err := db.Save(&order).Error; err != nil {
-		c.JSON(http.StatusConflict, gin.H{"error": "Gagal Update status"})
+	// Get the new status from request form data
+	newStatus := c.PostForm("Status")
+
+	// Check if the new status is empty
+	if newStatus == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Status cannot be empty"})
 		return
 	}
 
-	c.JSON(http.StatusCreated, gin.H{"message": "Order Updated"})
+	// Update the status field
+	result = db.Model(&order).Update("status", newStatus)
+
+	if result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update order status"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Order status updated successfully", "order": order})
 }

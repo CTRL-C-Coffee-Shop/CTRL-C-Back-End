@@ -3,6 +3,7 @@ package main
 import (
 	"CTRL-C-Back-End/controllers"
 	"net/http"
+
 	// Import the CORS middleware
 	"github.com/gin-gonic/gin"
 )
@@ -28,10 +29,15 @@ func main() {
 	// Your existing routes
 	r.POST("/register", controllers.Register)
 	r.POST("/userlogin", controllers.Login)
-	r.GET("/userlogout", controllers.Logout)
 
-	// Your existing /product route
+	//admin order
+	r.GET("/getorderadmin", controllers.Authenticate(true), controllers.GetOrderAdmin)
+	r.POST("/updateorderstatus", controllers.Authenticate(true), controllers.UpdateOrderStatus)
+
+	// voucher, kedai and product
+	r.GET("/getvoucher", controllers.Authenticate(false), controllers.GetAllVouchers)
 	r.GET("/product", controllers.Authenticate(false), controllers.GetAllProducts)
+	r.GET("/getkedai", controllers.Authenticate(false), controllers.GetKedai)
 
 	r.Run("localhost:8080")
 }
