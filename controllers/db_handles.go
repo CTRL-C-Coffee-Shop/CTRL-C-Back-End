@@ -13,7 +13,7 @@ import (
 
 func connect() *gorm.DB {
 	// refer https://github.com/go-sql-driver/mysql#dsn-data-source-name for details
-	dsn := "root:abc@tcp(127.0.0.1:3306)/ctrl_c_db?charset=utf8mb4&parseTime=True&loc=Local"
+	dsn := "root:@tcp(127.0.0.1:3306)/ctrl_c?charset=utf8mb4&parseTime=True&loc=Local"
 
 	// Tanpa Password
 	// dsn := "root:@tcp(127.0.0.1:3306)/ctrl_c+db?charset=utf8mb4&parseTime=True&loc=Local"

@@ -19,6 +19,5 @@ func GetAllProducts(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get product"})
 		return
 	}
-
-	c.JSON(http.StatusOK, products)
+	c.JSON(http.StatusOK, gin.H{"message": "Success fetching product data", "product": products})
 }
