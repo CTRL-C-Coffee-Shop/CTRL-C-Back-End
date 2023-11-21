@@ -9,7 +9,7 @@ import (
 func GetOrderAdmin(c *gin.Context) {
 	db := connect()
 
-	var orders []Order
+	var orders []OrderAdmin
 
 	// Use Preload to include the associated Voucher data
 	result := db.Table("orders").Find(&orders)
@@ -28,7 +28,7 @@ func UpdateOrderStatus(c *gin.Context) {
 	orderID := c.PostForm("Order_Id")
 
 	// Find the order by ID
-	var order Order
+	var order OrderAdmin
 	result := db.Table("orders").First(&order, orderID)
 
 	if result.Error != nil {
