@@ -18,5 +18,6 @@ func GetKedai(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, Kedai)
+	c.JSON(http.StatusOK, gin.H{"message": "Data successfully retrieved", "Kedai": Kedai})
+
 }
