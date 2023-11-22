@@ -19,7 +19,7 @@ func GetOrderAdmin(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, orders)
+	c.JSON(http.StatusOK, gin.H{"message": "Orders retrieved successfully", "orders": orders})
 }
 func UpdateOrderStatus(c *gin.Context) {
 	db := connect()

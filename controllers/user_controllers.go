@@ -17,13 +17,13 @@ func Register(c *gin.Context) {
 	accessType := c.PostForm("AccessType")
 	// Memeriksa apakah salah satu data kosong
 	if fullName == "" || email == "" || password == "" || accessType == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Harap isi semua field"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Please fill in all fields"})
 		return
 	}
 	// Mengkonversi string "true" menjadi true, yang merupakan tipe bool
 	accType, err := strconv.ParseBool(accessType)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Tipe akses tidak valid"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid access type"})
 		return
 	}
 
@@ -45,11 +45,11 @@ func Register(c *gin.Context) {
 	// Simpan pengguna ke dalam database
 	result := db.Create(&newUser)
 	if result.Error != nil {
-		c.JSON(http.StatusConflict, gin.H{"error": "Gagal mendaftarkan pengguna"})
+		c.JSON(http.StatusConflict, gin.H{"error": "Failed to register user"})
 		return
 	}
 
-	c.JSON(http.StatusCreated, gin.H{"message": "Pengguna berhasil terdaftar"})
+	c.JSON(http.StatusCreated, gin.H{"message": "User successfully registered"})
 }
 func hashPassword(password string) string {
 	// Membuat instance SHA-256 hasher
@@ -74,7 +74,7 @@ func Login(c *gin.Context) {
 
 	// Memeriksa apakah data email atau password kosong
 	if email == "" || password == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Email dan password harus diisi"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Email and password must be filled"})
 		return
 	}
 
@@ -85,7 +85,7 @@ func Login(c *gin.Context) {
 	var user User
 	result := db.Where("email = ?", email).First(&user)
 	if result.Error != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Email atau password salah"})
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Incorrect email or password"})
 		return
 	}
 
@@ -95,18 +95,18 @@ func Login(c *gin.Context) {
 
 	// Memeriksa apakah kata sandi yang diinputkan sama dengan kata sandi yang ada dalam database
 	if inputPasswordHash != user.Password {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Email atau password salah"})
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Incorrect email or password"})
 		return
 	}
 
 	// Jika login sukses, Anda dapat memanggil generateToken berdasarkan AccType pengguna
 	jwtToken, err := generateToken(int(user.ID), user.FullName, user.Email, user.AccType)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Gagal menghasilkan token"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to generate token"})
 		return
 	}
 	c.SetCookie(tokenName, jwtToken, 0, "/", "", false, true)
 
 	// Mengirim pesan sukses, nama pengguna, dan token sebagai respons
-	c.JSON(http.StatusOK, gin.H{"message": "Berhasil login", "name": user.FullName, "token": jwtToken})
+	c.JSON(http.StatusOK, gin.H{"message": "Login successful", "user_id": user.ID, "full_name": user.FullName, "email": user.Email, "token": jwtToken})
 }

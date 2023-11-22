@@ -19,5 +19,5 @@ func GetAllVouchers(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, vouchers)
+	c.JSON(http.StatusOK, gin.H{"message": "Successfully retrieved vouchers", "vouchers": vouchers})
 }

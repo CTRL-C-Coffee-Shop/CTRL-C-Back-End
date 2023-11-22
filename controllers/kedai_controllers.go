@@ -18,5 +18,10 @@ func GetKedai(c *gin.Context) {
 		return
 	}
 
+<<<<<<< HEAD
 	c.JSON(http.StatusOK, gin.H{"message": "Success fetching all store", "stores": Kedai})
+=======
+	c.JSON(http.StatusOK, gin.H{"message": "Data successfully retrieved", "Kedai": Kedai})
+
+>>>>>>> Perbaikan_login
 }
