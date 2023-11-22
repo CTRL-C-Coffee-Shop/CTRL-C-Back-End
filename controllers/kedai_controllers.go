@@ -14,14 +14,8 @@ func GetKedai(c *gin.Context) {
 	result := db.Table("kedai").Find(&Kedai) // Perhatikan penggunaan db.Table("product") untuk merujuk tabel "product"
 
 	if result.Error != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Gagal mengambil produk"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch products"})
 		return
 	}
-
-<<<<<<< HEAD
-	c.JSON(http.StatusOK, gin.H{"message": "Success fetching all store", "stores": Kedai})
-=======
 	c.JSON(http.StatusOK, gin.H{"message": "Data successfully retrieved", "Kedai": Kedai})
-
->>>>>>> Perbaikan_login
 }
