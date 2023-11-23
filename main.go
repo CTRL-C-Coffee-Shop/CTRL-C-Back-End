@@ -29,6 +29,8 @@ func main() {
 	// Your existing routes
 	r.POST("/register", controllers.Register)
 	r.POST("/userlogin", controllers.Login)
+	r.POST("/order", controllers.GetOrder)
+	// r.GET("/getorder", controllers.Authenticate(true), controllers.GetOrder)
 
 	//admin order
 	r.GET("/getorderadmin", controllers.Authenticate(true), controllers.GetOrderAdmin)
