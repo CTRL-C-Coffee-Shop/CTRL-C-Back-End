@@ -58,6 +58,20 @@ func DeleteCart(c *gin.Context) { //delete the cart from specific user and speci
 	c.JSON(http.StatusOK, gin.H{"message": "Product successfully deleted from cart"})
 }
 
+func DeleteAllCart(c *gin.Context) { //delete all cart from specific user
+	db := connect()
+
+	UserID, _ := strconv.Atoi(c.PostForm("UserID"))
+	var cart Cart
+
+	result := db.Where("id_user = ?", UserID).Delete(&cart)
+	if result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete cart item"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "Data successfully deleted from cart"})
+}
+
 func UpdateCart(c *gin.Context) { //only change the amount of product that added into user's cart
 	UserID, _ := strconv.Atoi(c.PostForm("UserID"))
 	ProdID, _ := strconv.Atoi(c.PostForm("ProdID"))
