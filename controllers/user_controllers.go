@@ -108,5 +108,5 @@ func Login(c *gin.Context) {
 	c.SetCookie(tokenName, jwtToken, 0, "/", "", false, true)
 
 	// Mengirim pesan sukses, nama pengguna, dan token sebagai respons
-	c.JSON(http.StatusOK, gin.H{"message": "Login successful", "user_id": user.ID, "full_name": user.FullName, "email": user.Email, "token": jwtToken})
+	c.JSON(http.StatusOK, gin.H{"message": "Login successful", "user_id": user.ID, "full_name": user.FullName, "email": user.Email, "token": jwtToken, "access_type": user.AccType})
 }

@@ -45,7 +45,7 @@ type OrderUser struct {
 	ShopID      uint          `gorm:"column:id_kedai;not null" json:"id_kedai"`
 	VoucherID   uint          `gorm:"column:id_voucher;not null" json:"voucher_id"`
 	Date        string        `gorm:"column:date;not null" json:"date"`
-	Price       uint          `gorm:"column:price;not null" json:"price"`
+	Price       uint          `gorm:"column:total_price;not null" json:"price"`
 	Status      string        `gorm:"column:status;not null" json:"status"`
 	OrderDetail []OrderDetail `gorm:"foreignKey:IDOrder" json:"order_detail"`
 	Voucher     Voucher       `gorm:"foreignKey:VoucherID" json:"voucher"`

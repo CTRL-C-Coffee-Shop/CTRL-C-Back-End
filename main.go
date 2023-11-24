@@ -30,6 +30,7 @@ func main() {
 	r.POST("/register", controllers.Register)
 	r.POST("/userlogin", controllers.Login)
 	r.POST("/order", controllers.GetOrder)
+	r.POST("/createorder", controllers.CreateOrder)
 	// r.GET("/getorder", controllers.Authenticate(true), controllers.GetOrder)
 
 	//admin order
