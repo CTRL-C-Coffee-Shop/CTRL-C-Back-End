@@ -17,6 +17,12 @@ type Product struct {
 	URL         string  `json:"url"`
 }
 
+type Cart struct {
+	UserID    int `gorm:"primaryKey"`
+	ProductID int `gorm:"primaryKey"`
+	Amount    int `gorm:"not null"`
+}
+
 type Kedai struct {
 	ID      uint   `json:"id"`
 	Name    string `json:"name"`
