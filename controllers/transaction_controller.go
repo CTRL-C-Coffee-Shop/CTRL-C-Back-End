@@ -8,13 +8,13 @@ import (
 )
 
 //order harap dipindah ke paling bawah
-func GetCart(c *gin.Context) {
+func GetCart(c *gin.Context) {//get all cart from user x
 	db := connect()
 
 	UserID, _ := strconv.Atoi(c.PostForm("UserID"))
 	var cart Cart
 
-	result := db.Where("id_user = ?", UserID).First(&cart)
+	result := db.Where("id_user = ?", UserID).Find(&cart)
 	if result.Error != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get cart item"})
 		return
@@ -26,13 +26,19 @@ func PostCart(c *gin.Context) { //produk masuk ke cart satu per satu
 	UserID, _ := strconv.Atoi(c.PostForm("UserID"))
 	ProdID, _ := strconv.Atoi(c.PostForm("ProdID"))
 	Amount, _ := strconv.Atoi(c.PostForm("Amount"))
+	Warmnth, _ := strconv.Atoi(c.PostForm("Warmnth"))
+	Size, _ := strconv.Atoi(c.PostForm("Size"))
+	SugarLvl, _ := strconv.Atoi(c.PostForm("SugarLvl"))
 
 	db := connect()
 
 	newCart := Cart{
 		UserID:    UserID,
 		ProductID: ProdID,
-		Amount:    Amount,
+		Amount:    Amount, 
+		Warmnth: Warmnth,
+		Size: 	Size,
+		sugarLvl: SugarLvl,
 	}
 
 	result := db.Create(&newCart)
@@ -43,7 +49,7 @@ func PostCart(c *gin.Context) { //produk masuk ke cart satu per satu
 	c.JSON(http.StatusCreated, gin.H{"message": "Product successfully append into cart"})
 }
 
-func DeleteCart(c *gin.Context) { //delete the cart from specific user and specific product
+func DeleteCart(c *gin.Context) { //delete product x from user y in cart
 	db := connect()
 
 	UserID, _ := strconv.Atoi(c.PostForm("UserID"))
@@ -58,7 +64,7 @@ func DeleteCart(c *gin.Context) { //delete the cart from specific user and speci
 	c.JSON(http.StatusOK, gin.H{"message": "Product successfully deleted from cart"})
 }
 
-func DeleteAllCart(c *gin.Context) { //delete all cart from specific user
+func DeleteAllCart(c *gin.Context) { //delete all cart from user x
 	db := connect()
 
 	UserID, _ := strconv.Atoi(c.PostForm("UserID"))

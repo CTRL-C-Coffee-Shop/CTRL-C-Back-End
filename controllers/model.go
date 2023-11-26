@@ -21,6 +21,9 @@ type Cart struct {
 	UserID    int `gorm:"primaryKey"`
 	ProductID int `gorm:"primaryKey"`
 	Amount    int `gorm:"not null"`
+	Warmnth   int
+	Size      int
+	sugarLvl  int
 }
 
 type Kedai struct {
