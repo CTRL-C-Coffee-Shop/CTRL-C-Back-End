@@ -138,12 +138,24 @@ func GetOrder(c *gin.Context) {
 		Preload("Voucher").
 		Preload("Kedai").
 		Find(&orders)
-
 	if result.Error != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve orders"})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"message": "Successfully retrieved orders", "orders": orders})
+
+	for i := range orders {
+		datetime, err := time.Parse(time.RFC3339, orders[i].Date)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to parse datetime"})
+			return
+		}
+
+		// Set the separated date and time values
+		orders[i].DateOnly = datetime.Format("2006-01-02") // Format "YYYY-MM-DD"
+		orders[i].TimeOnly = datetime.Format("15:04:05")   // Format "HH:MM:SS"
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Orders retrieved successfully", "orders": orders})
 }
 func CreateOrder(c *gin.Context) {
 	db := connect()

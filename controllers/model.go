@@ -41,6 +41,9 @@ type OrderAdmin struct {
 	Date      string `gorm:"column:date;not null" json:"date"`
 	Price     uint   `gorm:"column:total_price;not null" json:"price"`
 	Status    string `gorm:"column:status;not null" json:"status"`
+	// Fields for separated date and time
+	DateOnly string `json:"date_only"`
+	TimeOnly string `json:"time_only"`
 }
 type OrderUser struct {
 	IDOrder     uint          `gorm:"column:id_order;primaryKey" json:"id_order"`
@@ -50,6 +53,8 @@ type OrderUser struct {
 	Date        string        `gorm:"column:date;not null" json:"date"`
 	Price       uint          `gorm:"column:total_price;not null" json:"price"`
 	Status      string        `gorm:"column:status;not null" json:"status"`
+	DateOnly    string        `json:"date_only"`
+	TimeOnly    string        `json:"time_only"`
 	OrderDetail []OrderDetail `gorm:"foreignKey:IDOrder" json:"order_detail"`
 	Voucher     Voucher       `gorm:"foreignKey:VoucherID" json:"voucher"`
 	Kedai       Kedai         `gorm:"foreignKey:ShopID" json:"kedai"`
