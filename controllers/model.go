@@ -79,3 +79,7 @@ func (OrderUser) TableName() string {
 func (OrderDetail) TableName() string {
 	return "detail_orders"
 }
+
+func (OrderAdmin) TableName() string {
+	return "orders"
+}
