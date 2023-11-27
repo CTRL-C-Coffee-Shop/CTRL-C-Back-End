@@ -6,6 +6,7 @@ type User struct {
 	Email    string `gorm:"not null;unique"`
 	Password string `gorm:"not null"`
 	AccType  bool   `gorm:"not null"`
+	url      string
 }
 
 type Product struct {
