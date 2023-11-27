@@ -27,6 +27,9 @@ type OrderDetail struct {
 	IDOrder   uint    `gorm:"primaryKey;column:id_order" json:"id_order"`
 	ProductID uint    `gorm:"primaryKey;column:id_product" json:"id_product"`
 	Amount    uint    `gorm:"column:number;not null" json:"amount"`
+	Warmth    int     `gorm:"column:warmth" json:"warmth"`
+	Size      int     `gorm:"column:size" json:"size"`
+	SugarLvl  int     `gorm:"column:sugarLvl" json:"sugarLvl"`
 	Product   Product `gorm:"foreignKey:ProductID"`
 }
 
@@ -36,7 +39,7 @@ type OrderAdmin struct {
 	ShopID    uint   `gorm:"column:id_kedai;not null" json:"id_kedai"`
 	VoucherID uint   `gorm:"column:id_voucher;not null" json:"voucher_id"`
 	Date      string `gorm:"column:date;not null" json:"date"`
-	Price     uint   `gorm:"column:price;not null" json:"price"`
+	Price     uint   `gorm:"column:total_price;not null" json:"price"`
 	Status    string `gorm:"column:status;not null" json:"status"`
 }
 type OrderUser struct {
@@ -57,6 +60,14 @@ type Voucher struct {
 	Description string `json:"description"`
 	Discount    uint   `json:"discount"`
 	Number      uint   `json:"number"`
+}
+type Cart struct {
+	UserID    int `gorm:"column:id_user;primaryKey;not null" json:"id_user"`
+	ProductID int `gorm:"column:id_product;primaryKey;not null" json:"id_product"`
+	Amount    int `gorm:"column:amount;not null" json:"amount"`
+	Warmth    int `gorm:"column:warmth" json:"warmth"`
+	Size      int `gorm:"column:size" json:"size"`
+	SugarLvl  int `gorm:"column:sugarLvl" json:"sugarLvl"`
 }
 
 type ErrorResponse struct {
@@ -82,4 +93,7 @@ func (OrderDetail) TableName() string {
 
 func (OrderAdmin) TableName() string {
 	return "orders"
+}
+func (Cart) TableName() string {
+	return "cart"
 }

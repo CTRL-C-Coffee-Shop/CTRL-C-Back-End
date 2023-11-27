@@ -22,8 +22,7 @@ type Claims struct {
 }
 
 func generateToken(id int, name string, email string, userType bool) (string, error) {
-	tokenExpiryTime := time.Now().Add(1000 * 365 * time.Hour)
-
+	tokenExpiryTime := time.Now().Add(1 * time.Hour)
 	// Membuat claims
 	claims := &Claims{
 		ID:       id,

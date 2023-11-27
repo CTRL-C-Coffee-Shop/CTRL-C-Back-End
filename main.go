@@ -29,10 +29,12 @@ func main() {
 	// Your existing routes
 	r.POST("/register", controllers.Register)
 	r.POST("/userlogin", controllers.Login)
-	r.POST("/order", controllers.GetOrder)
-	r.POST("/createorder", controllers.CreateOrder)
-	// r.GET("/getorder", controllers.Authenticate(true), controllers.GetOrder)
-
+	r.POST("/getorder", controllers.Authenticate(false), controllers.GetOrder)
+	r.POST("/createorder", controllers.Authenticate(false), controllers.CreateOrder)
+	r.POST("/getcart", controllers.Authenticate(false), controllers.GetCart)
+	r.POST("/postcart", controllers.Authenticate(false), controllers.PostCart)
+	r.POST("/deletecart", controllers.Authenticate(false), controllers.DeleteCart)
+	r.POST("/deleteallcart", controllers.Authenticate(false), controllers.DeleteAllCart)
 	//admin order
 	r.GET("/getorderadmin", controllers.Authenticate(true), controllers.GetOrderAdmin)
 	r.POST("/updateorderstatus", controllers.Authenticate(true), controllers.UpdateOrderStatus)
