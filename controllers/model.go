@@ -6,6 +6,7 @@ type User struct {
 	Email    string `gorm:"not null;unique"`
 	Password string `gorm:"not null"`
 	AccType  bool   `gorm:"not null"`
+	Url      string `gorm:"not null"`
 }
 
 type Product struct {
@@ -59,6 +60,16 @@ type OrderUser struct {
 	Voucher     Voucher       `gorm:"foreignKey:VoucherID" json:"voucher"`
 	Kedai       Kedai         `gorm:"foreignKey:ShopID" json:"kedai"`
 }
+type Order struct {
+	IDOrder     uint          `gorm:"column:id_order;primaryKey" json:"id_order"`
+	UserID      uint          `gorm:"column:id_user;not null" json:"user_id"`
+	ShopID      uint          `gorm:"column:id_kedai;not null" json:"id_kedai"`
+	VoucherID   uint          `gorm:"column:id_voucher;not null" json:"voucher_id"`
+	Date        string        `gorm:"column:date;not null" json:"date"`
+	Price       uint          `gorm:"column:total_price;not null" json:"price"`
+	Status      string        `gorm:"column:status;not null" json:"status"`
+	OrderDetail []OrderDetail `gorm:"foreignKey:IDOrder" json:"order_detail"`
+}
 type Voucher struct {
 	ID          uint   `json:"id"`
 	Name        string `json:"name"`
@@ -101,4 +112,8 @@ func (OrderAdmin) TableName() string {
 }
 func (Cart) TableName() string {
 	return "cart"
+}
+
+func (Order) TableName() string {
+	return "orders"
 }

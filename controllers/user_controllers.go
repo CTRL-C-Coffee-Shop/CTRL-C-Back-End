@@ -40,6 +40,7 @@ func Register(c *gin.Context) {
 		Email:    email,
 		Password: hashedPassword,
 		AccType:  accType,
+		Url:      "",
 	}
 
 	// Simpan pengguna ke dalam database
@@ -109,4 +110,53 @@ func Login(c *gin.Context) {
 
 	// Mengirim pesan sukses, nama pengguna, dan token sebagai respons
 	c.JSON(http.StatusOK, gin.H{"message": "Login successful", "user_id": user.ID, "full_name": user.FullName, "email": user.Email, "token": jwtToken, "access_type": user.AccType})
+}
+
+func UpdateUser(c *gin.Context) {
+	fullName := c.PostForm("FullName")
+	email := c.PostForm("Email")
+	url := c.PostForm("Url")
+	userID, _ := strconv.Atoi(c.PostForm("userID"))
+
+	db := connect()
+	var user User
+	result := db.Where("email = ?", email).First(&user)
+
+	if result.Error == nil { //periksa lagi, tujuan: ngecek buat jangan ada email yang sama
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Email already exist"})
+		return
+	}
+
+	query := db.Where("id_user = ?", userID).First(&user)
+	if query.Error != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "User not found"})
+		return
+	}
+	query = db.Table("users").Where("id_user = ?", userID).Select("fullname", "email", "url").Updates(User{FullName: fullName, Email: email, Url: url})
+	if query.Error != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Failed to update user's data"})
+		return
+	}
+	c.JSON(http.StatusCreated, gin.H{"message": "successfully update data"})
+}
+
+func ChangePass(c *gin.Context) { //for change password in edit profile menu
+	userID, _ := strconv.Atoi(c.PostForm("userID"))
+	password1 := c.PostForm("Password1") //old password
+	password2 := c.PostForm("Password2") //new password
+
+	if password1 == password2 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Please enter a different password"})
+		return
+	}
+
+	password2 = hashPassword(password2)
+	db := connect()
+	var user User
+	result := db.Model(user).Where("id_user = ?", userID).Update("password", password2)
+	if result.Error != nil {
+		c.JSON(http.StatusConflict, gin.H{"error": "Failed to change user's password"})
+		return
+	}
+	c.JSON(http.StatusCreated, gin.H{"message": "Password updated"})
 }

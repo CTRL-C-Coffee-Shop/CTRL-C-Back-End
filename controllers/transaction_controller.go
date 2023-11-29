@@ -226,7 +226,7 @@ func CreateOrder(c *gin.Context) {
 	currentDate := time.Now().Format("2006-01-02 15:04:05")
 
 	// Create a new order
-	newOrder := OrderUser{
+	newOrder := Order{
 		UserID:    uint(userID),
 		ShopID:    uint(shopID),
 		VoucherID: uint(voucherID),
