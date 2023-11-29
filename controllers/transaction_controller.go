@@ -34,46 +34,13 @@ func GetCart(c *gin.Context) {
 		var product Product
 		db.First(&product, item.ProductID)
 
-		// Menambahkan data item dan data produk ke dalam slice cartData
-		var warmthLabel, sugarLabel, sizeLabel string
-
-		// Map Warmth
-		switch item.Warmth {
-		case 1:
-			warmthLabel = "Hot"
-		case 2:
-			warmthLabel = "Iced"
-		default:
-			warmthLabel = "Unknown"
-		}
-
-		// Map Sugar Level
-		switch item.SugarLvl {
-		case 1:
-			sugarLabel = "Normal"
-		case 2:
-			sugarLabel = "Less Sugar"
-		default:
-			sugarLabel = "Unknown"
-		}
-
-		// Map Size
-		switch item.Size {
-		case 1:
-			sizeLabel = "Regular"
-		case 2:
-			sizeLabel = "Large"
-		default:
-			sizeLabel = "Unknown"
-		}
-
 		// Add data to cartData with mapped labels
 		cartData = append(cartData, gin.H{
 			"Amount":   item.Amount,
 			"Product":  product,
-			"Warmth":   warmthLabel,
-			"Size":     sizeLabel,
-			"SugarLvl": sugarLabel,
+			"Warmth":   item.Warmth,
+			"Size":     item.Size,
+			"SugarLvl": item.SugarLvl,
 		})
 
 	}
